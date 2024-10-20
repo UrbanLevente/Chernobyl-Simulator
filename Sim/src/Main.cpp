@@ -1,5 +1,4 @@
-#include <nbpch.h>
-#include "Application.h"
+#include <pch.h>
 
 #include "Renderer.h"
 #include "Camera.h"
@@ -9,12 +8,8 @@
 
 #include "UI/RenderControls.h"
 
-namespace Nebula {
-	
-	Application::Application() {}
-	Application::~Application() {}
 
-	int Application::Run() {
+	int main() {
 		GLFWwindow* window;
 
 		if (!glfwInit()) {
@@ -51,7 +46,7 @@ namespace Nebula {
 			glm::vec3 Rotation(0.0f, 0.0f, 0.0f);
 			glm::vec3 Transposition(0.0f, 0.0f, 0.0f);
 
-			float FOV = 45.0f;
+			float FOV = 90.0f;
 
 
 			float vertecies[] = {
@@ -163,10 +158,17 @@ namespace Nebula {
 
 				ImGui::Text("");
 
-				ImGui::SliderFloat("FOV", &FOV, 30.0f, 120.0f);
+				ImGui::Text("FOV");
+				ImGui::SameLine();
+				ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+				ImGui::SliderFloat("##FOV", &FOV, 30.0f, 120.0f);
+				ImGui::PopStyleVar();
 
 				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-				ImGui::Checkbox("Enable V-Sync", &VSync);
+				
+				ImGui::Text("Enable V-Sync");
+				ImGui::SameLine();
+				ImGui::Checkbox("##vsync", &VSync);
 
 				ImGui::End();
 
@@ -184,4 +186,3 @@ namespace Nebula {
 		glfwTerminate();
 		return 0;
 	}
-}

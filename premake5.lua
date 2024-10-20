@@ -2,7 +2,7 @@ include "Dependencies.lua"
 
 workspace "Sim"
     architecture "x64"
-    startproject "App"
+    startproject "Sim"
 
     configurations
     {
@@ -27,9 +27,3 @@ workspace "Sim"
 	include "Sim/vendor/Glad"
 	include "Sim/vendor/imgui"
     group ""
-
-    group "Misc"
-	include "App"
-    group ""
-
-

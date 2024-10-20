@@ -1,5 +1,5 @@
 project "Sim"
-    kind "SharedLib"
+    kind "ConsoleApp"
     language "C++"
     cppdialect "C++17"
     staticruntime "Off"
@@ -19,7 +19,8 @@ project "Sim"
 
     includedirs
 	{
-		"src/Sim",
+		"./",
+		"src",
 		"vendor",
 		"%{IncludeDirs.GLFW}",
 		"%{IncludeDirs.Glad}",
