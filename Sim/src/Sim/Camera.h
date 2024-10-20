@@ -7,6 +7,10 @@
 
 class Camera {
 public:
+
+	float deltaTime = 0.0f;
+	float lastFrame = 0.0f;
+
 	Camera(int width, int height, glm::vec3 position);
 	void Matrix(GLFWwindow* window, float windowRatio, float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform);
 	void Inputs(GLFWwindow* window);
@@ -23,5 +27,5 @@ private:
 
 	// New variables
 	bool escPressed = false;  // Tracks ESC press state
-	bool focused = true;      // Tracks camera focus state
+	bool focused = false;      // Tracks camera focus state
 };

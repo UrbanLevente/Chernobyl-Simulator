@@ -1,9 +1,13 @@
 #include <nbpch.h>
 #include "Application.h"
 
-#include "UI/RenderControls.h"
+#include "Renderer.h"
+#include "Camera.h"
 
-#include "tests/TestClearColor.h"
+#include "VertexBufferLayout.h"
+#include "Texture.h"
+
+#include "UI/RenderControls.h"
 
 namespace Nebula {
 	
@@ -104,12 +108,6 @@ namespace Nebula {
 			ImGui_ImplOpenGL3_Init();
 			ImGui::StyleColorsDark();
 
-			test::Test* currentTest = nullptr;
-			test::TestMenu* testMenu = new test::TestMenu(currentTest);
-			currentTest = testMenu;
-
-			testMenu->RegisterTest<test::TestClearColor>("Clear Color", window);
-
 			ImGuiIO& io = ImGui::GetIO();
 
 			RenderControls translationControl;
@@ -163,20 +161,10 @@ namespace Nebula {
 				translationControl.DrawVec3Control("Translation", Translation, 0.0f, 100.0f);
 				rotationControl.DrawVec3Control("Rotation", Rotation, 0.0f, 100.0f);
 
+				ImGui::Text("");
+
 				ImGui::SliderFloat("FOV", &FOV, 30.0f, 120.0f);
 
-				if (ImGui::CollapsingHeader("Tests")) {
-					if (currentTest) {
-						currentTest->OnUpdate(0.0f);
-						currentTest->OnRender();
-
-						if (currentTest != testMenu && ImGui::Button("<-")) {
-							delete currentTest;
-							currentTest = testMenu;
-						}
-						currentTest->OnImGuiRender();
-					}
-				}
 				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 				ImGui::Checkbox("Enable V-Sync", &VSync);
 

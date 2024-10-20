@@ -1,10 +1,18 @@
-#include "Camera.h"
 #include <nbpch.h>
+#include "Camera.h"
+
 
 
 Camera::Camera(int width, int height, glm::vec3 position) {
 	Camera::width = width;
 	Camera::height = height;
+
+	if (height == 0) {
+		height = 1;
+	} else if (width == 0) {
+		width = 1;
+	}
+
 	Position = position;
 
 	// Start the camera focused and hide the cursor
@@ -19,6 +27,12 @@ void Camera::Matrix(GLFWwindow* window, float windowRatio, float FOVdeg, float n
 
 	glfwGetFramebufferSize(window, &width, &height);
 
+	if (height == 0) {
+		height = 1;
+	} else if (width == 0) {
+		width = 1;
+	}
+
 	view = glm::lookAt(Position, Position + Orientation, Up);
 	projection = glm::perspective(glm::radians(FOVdeg), static_cast<float>(width) / static_cast<float>(height), nearPlane, farPlane);
 
@@ -27,6 +41,13 @@ void Camera::Matrix(GLFWwindow* window, float windowRatio, float FOVdeg, float n
 }
 
 void Camera::Inputs(GLFWwindow* window) {
+	// Calculate deltaTime
+	float currentFrame = (float)glfwGetTime();
+	deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
+
+	float adjustedSpeed = speed * deltaTime;
+
 	// Toggles camera focus when pressing ESC
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && !escPressed) {
 		focused = !focused;
@@ -34,6 +55,7 @@ void Camera::Inputs(GLFWwindow* window) {
 
 		// Toggle cursor visibility when focus changes
 		if (focused) {
+			firstClick = true;  // Reset the firstClick flag so the cursor is centered when focusing again
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);  // Hide the cursor and lock it
 		} else {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);  // Show the cursor
@@ -46,27 +68,27 @@ void Camera::Inputs(GLFWwindow* window) {
 	if (focused) {
 		// Handles key inputs for movement
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-			Position += speed * Orientation;
+			Position += adjustedSpeed * Orientation;
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-			Position += speed * -glm::normalize(glm::cross(Orientation, Up));
+			Position += adjustedSpeed * -glm::normalize(glm::cross(Orientation, Up));
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-			Position += speed * -Orientation;
+			Position += adjustedSpeed * -Orientation;
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-			Position += speed * glm::normalize(glm::cross(Orientation, Up));
+			Position += adjustedSpeed * glm::normalize(glm::cross(Orientation, Up));
 		}
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-			Position += speed * Up;
+			Position += adjustedSpeed * Up;
 		}
 		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-			Position += speed * -Up;
+			Position += adjustedSpeed * -Up;
 		}
 		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-			speed = 0.4f;
+			speed = 4.0f;
 		} else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE) {
-			speed = 0.1f;
+			speed = 1.0f;
 		}
 
 		// Handle mouse inputs for camera rotation

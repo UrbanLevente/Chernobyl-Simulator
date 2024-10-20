@@ -1,5 +1,7 @@
-#include "Shader.h"
 #include <nbpch.h>
+#include "Shader.h"
+
+#include "Renderer.h"
 
 Shader::Shader(const std::string& vertFile, const std::string& fragFile) : m_vertFile(vertFile), m_fragFile(fragFile), m_RendererID(0) {
 	ShaderProgramSource source = ParseShader(vertFile, fragFile);

@@ -1,5 +1,5 @@
-#include "Renderer.h"
 #include <nbpch.h>
+#include "Renderer.h"
 
 // GLClearError and GLLogCall are for debugging too
 void GLClearError()
