@@ -95,7 +95,11 @@ xcopy /Y /I "$(TargetPath)" "$(SolutionDir)bin\Game\$(Configuration)-Windows-$(P
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Engine.h" />
     <ClInclude Include="Core\EngineAPI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Core\Engine.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
